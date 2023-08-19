@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,8 +20,8 @@ public class Order {
     private OrderStatus status;
     private int totalAmount;
     @OneToMany
-    @JoinColumn(name = "order_id")
-    private List<OrderProduct> orderProducts;
+    @JoinColumn(name = "order_id", insertable = false, updatable = false)
+    private List<OrderProduct> orderProducts = new ArrayList<>();
     private LocalDateTime createdAt;
 
     public Order(Orderer orderer, OrderStatus status, List<OrderProduct> orderProducts) {

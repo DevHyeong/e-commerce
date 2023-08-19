@@ -63,11 +63,6 @@ public class OrderControllerTest {
                         .content(content));
         result.andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.body.status", is(OrderStatus.PREPARING_FOR_PRODUCT)));
-    }
-
-    @Test
-    void testOrder() throws Exception{
-
+                .andExpect(jsonPath("$.status", is(OrderStatus.PREPARING_FOR_PRODUCT.name())));
     }
 }
