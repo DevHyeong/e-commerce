@@ -2,6 +2,8 @@ package org.commerce.product.application.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.commerce.product.dto.CategoryRequest;
+import org.commerce.product.entity.Category;
+import org.commerce.product.repository.CategoryRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -28,6 +31,9 @@ class CategoryControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Test
     void testCreateCategory() throws Exception{
@@ -64,5 +70,27 @@ class CategoryControllerTest {
         result.andDo(print())
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$", is("category is not found")));
+    }
+
+    @Test
+    void testGetCategories() throws Exception{
+        //given
+        String id = "1";
+        categoryRepository.save(new Category(0L, "식품"));
+        categoryRepository.save(new Category(1L, "라면"));
+        categoryRepository.save(new Category(1L, "쌀"));
+        categoryRepository.save(new Category(1L, "계란"));
+
+        //when
+        ResultActions result = mockMvc.perform(get("/category/" + id)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        //then
+        result.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].name", is("라면")))
+                .andExpect(jsonPath("$.[1].name", is("쌀")))
+                .andExpect(jsonPath("$.[2].name", is("계란")));
     }
 }
