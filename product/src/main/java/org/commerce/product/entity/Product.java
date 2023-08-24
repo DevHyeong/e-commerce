@@ -9,27 +9,21 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Category {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long upperId;
+    private Long categoryId;
     private String name;
+    private int price;
+    private int totalAmount;
     private LocalDateTime createdAt;
 
-    public Category(Long upperId, String name){
-        this.upperId = upperId;
+    public Product(Long categoryId, String name, int price, int totalAmount){
+        this.categoryId = categoryId;
         this.name = name;
-    }
-
-    public Category(Long id, Long upperId, String name){
-        this.id = id;
-        this.upperId = upperId;
-        this.name = name;
-    }
-
-    public boolean isTopLevelCatgeory(){
-        return upperId == 0L;
+        this.price = price;
+        this.totalAmount = totalAmount;
     }
 
     @PrePersist

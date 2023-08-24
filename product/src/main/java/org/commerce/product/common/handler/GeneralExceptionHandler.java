@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GeneralExceptionHandler {
 
-    @ExceptionHandler({CategoryNotFoundException.class})
+    @ExceptionHandler({CategoryNotFoundException.class, IllegalArgumentException.class})
     public ResponseEntity<?> handleForbiddenException(Exception e){
         return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
     }

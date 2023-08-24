@@ -21,8 +21,7 @@ public class CategoryService {
         Category category = new Category(categoryRequest.getUpperId(), categoryRequest.getName());
 
         if(!category.isTopLevelCatgeory()){
-            categoryRepository.findById(category.getUpperId())
-                    .orElseThrow(() -> new CategoryNotFoundException("category is not found"));
+            getCategory(category.getUpperId());
         }
 
         Category result = categoryRepository.save(category);
@@ -34,6 +33,23 @@ public class CategoryService {
         return categories.stream()
                 .map(e-> toDto(e))
                 .collect(Collectors.toList());
+    }
+
+    public List<CategoryDto> getUpperAllCategories(Long id){
+        return categoryRepository.findUpperAllCategoriesById(id)
+                .stream()
+                .map(e-> toDto(e))
+                .collect(Collectors.toList());
+    }
+
+    public boolean hasLowerCategory(Long id){
+        List<Category> categories = categoryRepository.findByUpperId(id);
+        return !categories.isEmpty();
+    }
+
+    public Category getCategory(Long id) throws CategoryNotFoundException{
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException(String.format("category id %s is not found", id)));
     }
 
     private CategoryDto toDto(Category result) {
