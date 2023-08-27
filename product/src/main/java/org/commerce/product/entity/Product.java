@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -13,17 +14,23 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long categoryId;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
+    private List<ProductCategory> categories;
     private String name;
     private int price;
     private int totalAmount;
     private LocalDateTime createdAt;
 
-    public Product(Long categoryId, String name, int price, int totalAmount){
-        this.categoryId = categoryId;
+    public Product(List<ProductCategory> categories, String name, int price, int totalAmount){
+        this.categories = categories;
         this.name = name;
         this.price = price;
         this.totalAmount = totalAmount;
+    }
+
+    public void setCategories(List<ProductCategory> categories){
+        this.categories = categories;
     }
 
     @PrePersist
