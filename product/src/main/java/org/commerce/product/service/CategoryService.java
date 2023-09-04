@@ -5,7 +5,6 @@ import org.commerce.product.dto.CategoryDto;
 import org.commerce.product.dto.CategoryRequest;
 import org.commerce.product.entity.Category;
 import org.commerce.product.common.exception.CategoryNotFoundException;
-import org.commerce.product.entity.ProductCategory;
 import org.commerce.product.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -51,10 +50,6 @@ public class CategoryService {
     public Category getCategory(Long id) throws CategoryNotFoundException{
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(String.format("category id %s is not found", id)));
-    }
-
-    public List<ProductCategory> getProductCategories(List<Long> productIds){
-        return categoryRepository.findUpperAllCategoriesByIds(productIds);
     }
 
     private CategoryDto toDto(Category result) {

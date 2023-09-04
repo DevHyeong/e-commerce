@@ -19,7 +19,7 @@ public class SimpleProductFactory {
                 categories.stream()
                         .map(e-> {
                             atomicInteger.incrementAndGet();
-                            return new ProductCategory(e.getId(), atomicInteger.intValue());
+                            return new ProductCategory(e.getId(), e.getName(), atomicInteger.intValue());
                         })
                         .collect(Collectors.toList()),
                 productRequest.getName(),

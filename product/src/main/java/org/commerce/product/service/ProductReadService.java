@@ -27,18 +27,12 @@ public class ProductReadService {
     public ProductResponse getProduct(Long productId){
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(String.format("product id %s is not found", productId)));
-        List<Category> categories = categoryRepository.findAllById(product.getCategories().stream()
-                .map(e-> e.getCategoryId())
-                .collect(Collectors.toList()));
-        product.setCategories(createProductCategories(product,  categories.stream()
-                .map(e-> new CategoryDto(e.getId(), e.getName()))
-                .collect(Collectors.toList())));
         return toResponse(product);
     }
 
     public List<ProductResponse> getProducts(List<Long> productIds){
         List<Product> products = productRepository.findAllById(productIds);
-        List<ProductCategory> categories = categoryService.getProductCategories(productIds);
+        //List<ProductCategory> categories = categoryService.getProductCategories(productIds);
         return products.stream()
                 .map(e-> toResponse(e))
                 .collect(Collectors.toList());

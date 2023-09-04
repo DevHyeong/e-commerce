@@ -29,7 +29,6 @@ public class ProductWriteService {
         List<CategoryDto> categories = categoryService.getUpperAllCategories(productRequest.getCategoryId());
         Product product = toEntity(productRequest, categories);
         Product result = productRepository.save(product);
-        result.setCategories(createProductCategories(product, categories));
         return toResponse(result);
     }
 }

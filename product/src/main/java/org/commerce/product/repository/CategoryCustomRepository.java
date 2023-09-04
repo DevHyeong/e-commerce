@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface CategoryCustomRepository {
     List<Category> findUpperAllCategoriesById(Long id);
-    List<ProductCategory> findUpperAllCategoriesByIds(Iterable ids);
 
 
 }

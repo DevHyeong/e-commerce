@@ -92,7 +92,7 @@ public class ProductControllerTest {
         categoryRepository.save(new Category(0L, "식품"));
         categoryRepository.save(new Category(1L, "쌀/잡곡"));
         categoryRepository.save(new Category(2L, "백미"));
-        productWriteService.createProduct(productRequest);
+        createProduct(3L, "이천상품쌀", 12000, 50);
 
         //when
         ResultActions result = mockMvc.perform(get("/product/1")
@@ -137,7 +137,7 @@ public class ProductControllerTest {
         createProduct(9L, "거치대", 32000, 15);
         createProduct(9L, "바다투어낚씨대", 8000, 20);
 
-        List<Long> ids = Arrays.asList(1L, 2L, 3L, 4L);
+        List<Long> ids = Arrays.asList(1L, 3L, 5L, 6L);
         String content = objectMapper.writeValueAsString(ids);
 
         //when
@@ -147,7 +147,20 @@ public class ProductControllerTest {
 
         //then
         result.andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].productName", is("이천쌀")))
+                .andExpect(jsonPath("$[0].price", is(12000)))
+                .andExpect(jsonPath("$[0].totalAmount", is(10)))
+                .andExpect(jsonPath("$[0].categories[0].name", is("식품")))
+                .andExpect(jsonPath("$[0].categories[1].name", is("쌀/잡곡")))
+                .andExpect(jsonPath("$[0].categories[2].name", is("백미")))
+
+                .andExpect(jsonPath("$[2].productName", is("대추나무 버터 나이프")))
+                .andExpect(jsonPath("$[2].price", is(2600)))
+                .andExpect(jsonPath("$[2].totalAmount", is(25)))
+                .andExpect(jsonPath("$[2].categories[0].name", is("주방용품")))
+                .andExpect(jsonPath("$[2].categories[1].name", is("수저/커트러리")))
+                .andExpect(jsonPath("$[2].categories[2].name", is("나이프")));
     }
 
     private void createProduct(Long categoryId, String name, int price, int totalAmount){
