@@ -34,4 +34,5 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(productReadService.getProducts(ids));
     }
+
 }
