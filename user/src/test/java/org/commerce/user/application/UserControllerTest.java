@@ -2,6 +2,7 @@ package org.commerce.user.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.commerce.user.dto.LoginRequest;
+import org.commerce.user.dto.UserDto;
 import org.commerce.user.entity.User;
 import org.commerce.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -60,8 +62,71 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body));
         result.andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(header().exists("access_token"));
+    }
+    @Test
+    void testJoinWhenEmailFormatIsIncorrectThenIsBadRequest() throws Exception{
+        UserDto userDto = new UserDto();
+        userDto.setEmail("wogud19flkfkj");
+        userDto.setPassword("asdf1234!@");
+        userDto.setNickname("생각하는개발자");
+        String body = objectMapper.writeValueAsString(userDto);
+
+        ResultActions result = mockMvc.perform(post("/join")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
+        result.andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    void testJoinWhenEmailAlreadyExistsThenIsBadRequest() throws Exception{
+        User user = new User("wogud19@naver.com", "asdf1234!@", "행복하자");
+        userRepository.save(user);
+
+        UserDto userDto = new UserDto();
+        userDto.setEmail("wogud19@naver.com");
+        userDto.setPassword("asdf1234!@");
+        userDto.setNickname("생각하는개발자");
+        String body = objectMapper.writeValueAsString(userDto);
+
+        ResultActions result = mockMvc.perform(post("/join")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
+        result.andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void testJoinWhenPasswordFormatIsIncorrectThenIsBadRequest() throws Exception{
+        UserDto userDto = new UserDto();
+        userDto.setEmail("wogud19@naver.com");
+        userDto.setPassword("1234");
+        userDto.setNickname("생각하는개발자");
+        String body = objectMapper.writeValueAsString(userDto);
 
+        ResultActions result = mockMvc.perform(post("/join")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
+        result.andDo(print())
+                .andExpect(status().isBadRequest());
+
+    }
+    @Test
+    void testJoinWhenNicknameAlreadyExistsThenIsBadRequest() throws Exception{
+        User user = new User("wog12@gmail.com", "asdf1234!@", "생각하는 개발자");
+        userRepository.save(user);
+
+        UserDto userDto = new UserDto();
+        userDto.setEmail("wogud19@naver.com");
+        userDto.setPassword("asdf1234!@");
+        userDto.setNickname("생각하는개발자");
+        String body = objectMapper.writeValueAsString(userDto);
+
+        ResultActions result = mockMvc.perform(post("/join")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
+        result.andDo(print())
+                .andExpect(status().isBadRequest());
+    }
 }
