@@ -28,6 +28,10 @@ public class SecurityConfig {
                 .requestMatchers("/user/**")
                 .authenticated()
                 .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/join")
+                .permitAll()
+                .and()
                 .addFilter(new AuthenticationFilter(objectMapper, authenticationManagerBean()));
         http.headers().frameOptions().disable();
         return http.build();

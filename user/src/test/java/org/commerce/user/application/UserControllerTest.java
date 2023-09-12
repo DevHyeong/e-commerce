@@ -5,20 +5,24 @@ import org.commerce.user.dto.LoginRequest;
 import org.commerce.user.dto.UserDto;
 import org.commerce.user.entity.User;
 import org.commerce.user.repository.UserRepository;
+import org.commerce.user.validator.EmailValidator;
+import org.commerce.user.validator.PasswordValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.util.StringUtils;
 
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -77,7 +81,9 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body));
         result.andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.name())))
+                .andExpect(jsonPath("$.message", is(EmailValidator.MESSAGE)));
     }
     @Test
     void testJoinWhenEmailAlreadyExistsThenIsBadRequest() throws Exception{
@@ -109,7 +115,9 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body));
         result.andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.name())))
+                .andExpect(jsonPath("$.message", is(PasswordValidator.MESSAGE)));
 
     }
     @Test
