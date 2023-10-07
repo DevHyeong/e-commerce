@@ -122,7 +122,7 @@ class UserControllerTest {
     }
     @Test
     void testJoinWhenNicknameAlreadyExistsThenIsBadRequest() throws Exception{
-        User user = new User("wog12@gmail.com", "asdf1234!@", "생각하는 개발자");
+        User user = new User("wog12@gmail.com", "asdf1234!@", "생각하는개발자");
         userRepository.save(user);
 
         UserDto userDto = new UserDto();
@@ -137,4 +137,34 @@ class UserControllerTest {
         result.andDo(print())
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void testJoinWhenNicknameOver10ThenIsBadRequest() throws Exception{
+        UserDto userDto = new UserDto();
+        userDto.setEmail("wogud19@naver.com");
+        userDto.setPassword("asdf1234!@");
+        userDto.setNickname("생각하는개발자ㅁㅁㅁㅇ");
+        String body = objectMapper.writeValueAsString(userDto);
+
+        ResultActions result = mockMvc.perform(post("/join")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
+        result.andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    void testJoinWhenValidThenIsSuccess() throws Exception{
+        UserDto userDto = new UserDto();
+        userDto.setEmail("wogud19@naver.com");
+        userDto.setPassword("asdf1234!@");
+        userDto.setNickname("생각하는개발자");
+        String body = objectMapper.writeValueAsString(userDto);
+
+        ResultActions result = mockMvc.perform(post("/join")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body));
+        result.andDo(print())
+                .andExpect(status().isOk());
+    }
+
 }

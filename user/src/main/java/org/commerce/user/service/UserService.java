@@ -19,7 +19,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public UserDto join(UserDto userDto){
-        validate(userDto);
+        validate(userDto, userRepository);
         User user = new User(userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()), userDto.getNickname());
         User result = userRepository.save(user);
         return toDto(result);
