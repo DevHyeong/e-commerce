@@ -10,13 +10,12 @@
 - 하나의 주문에 하나 이상의 상품을 가지고 있다.
 - 주문한 상품은 가격과 수량 정보를 가지고 있다.
 
-https://congruous-approval-70a.notion.site/e-commerce-API-b456b9f9a54a4d60be45c31604da993a?pvs=4
-
 ## 상품 요구사항
-- 
 
-https://congruous-approval-70a.notion.site/e-commerce-API-abb01ba2b02e4af28dbed0addc6e370e
 
 ## 유저 요구사항
 
 
+## API 명세서
+- 주문: https://congruous-approval-70a.notion.site/e-commerce-API-b456b9f9a54a4d60be45c31604da993a?pvs=4
+- 상품: https://congruous-approval-70a.notion.site/e-commerce-API-abb01ba2b02e4af28dbed0addc6e370e
