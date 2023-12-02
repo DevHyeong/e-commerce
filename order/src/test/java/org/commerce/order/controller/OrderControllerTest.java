@@ -140,9 +140,5 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.products[1].categories[2].name", is("그릇/식기")))
                 .andExpect(jsonPath("$.products[1].price", is(21760)))
                 .andExpect(jsonPath("$.products[1].amount", is(3)));
-
-
-
-
     }
 }

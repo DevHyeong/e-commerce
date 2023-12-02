@@ -1,9 +1,7 @@
 package org.commerce.order.entity;
 
-import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +17,4 @@ public class Orderer {
         this.userId = userId;
         this.receiver = receiver;
     }
-
-
 }

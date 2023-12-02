@@ -1,9 +1,10 @@
 package org.commerce.order.entity;
 
-import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
+import org.springframework.util.StringUtils;
+
 
 @Embeddable
 @Getter
