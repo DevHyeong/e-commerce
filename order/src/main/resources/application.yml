@@ -1,0 +1,14 @@
+debug: true
+spring:
+  datasource:
+    driveClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/order?characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Seoul&useSSL=false
+    username: root
+    password: root1234
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: create
