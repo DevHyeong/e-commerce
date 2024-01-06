@@ -23,7 +23,7 @@ import java.util.List;
 @Profile("default")
 @Service
 @RequiredArgsConstructor
-public class ProductRestTemplate implements ProductApiService{
+public class ProductApiServiceImpl implements ProductApiService{
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private static final String url = "http://localhost:1234";
