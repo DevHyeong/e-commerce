@@ -1,5 +1,14 @@
-debug: true
+server:
+  port: 0
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 spring:
+  application:
+    name: order-service
   datasource:
     driveClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/order?characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Seoul&useSSL=false
@@ -12,3 +21,6 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: create
+order-service:
+  api-gateway-url: http://localhost:8080
+
