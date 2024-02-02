@@ -10,11 +10,9 @@ import java.time.ZoneId;
 import java.util.Date;
 
 public class TokenUtils {
-    private static final String secretKey = "asdfqwer1234";
-
-    public static String generateToken(String email, LocalDateTime expiredAt){
+    public static String generateToken(String secretKey, Long userId, LocalDateTime expiredAt){
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(String.valueOf(userId))
                 .setExpiration(convert(expiredAt))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();

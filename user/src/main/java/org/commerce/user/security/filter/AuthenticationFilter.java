@@ -5,11 +5,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.commerce.user.dto.LoginRequest;
 import org.commerce.user.security.jwt.TokenUtils;
 import org.commerce.user.security.model.SecuredUser;
-import org.springframework.core.env.Environment;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,10 +19,14 @@ import java.time.LocalDateTime;
 
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
+    private final String secretKey;
     private final ObjectMapper objectMapper;
 
-    public AuthenticationFilter (ObjectMapper objectMapper, AuthenticationManager authenticationManager){
+    public AuthenticationFilter (
+            String secretKey,
+            ObjectMapper objectMapper,
+            AuthenticationManager authenticationManager){
+        this.secretKey = secretKey;
         this.objectMapper = objectMapper;
         super.setAuthenticationManager(authenticationManager);
     }
@@ -48,7 +51,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
         SecuredUser securedUser = (SecuredUser) authResult.getPrincipal();
-        String token = TokenUtils.generateToken(securedUser.getEmail(), LocalDateTime.now().plusDays(1));
-        response.setHeader("access_token", token);
+        String token = TokenUtils.generateToken(
+                secretKey,
+                securedUser.getUserId(),
+                LocalDateTime.now().plusDays(1));
+        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
     }
 }

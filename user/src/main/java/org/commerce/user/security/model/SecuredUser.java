@@ -12,6 +12,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SecuredUser implements UserDetails {
+    private Long userId;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
