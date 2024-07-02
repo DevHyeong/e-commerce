@@ -23,6 +23,7 @@ public class UserService {
         validate(userDto, userRepository);
         User user = new User(userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()), userDto.getNickname());
         User result = userRepository.save(user);
+        System.out.println("change");
         return toDto(result);
     }
     public UserDto user(Long userId){
